@@ -1,6 +1,5 @@
-package by.arsy.cleancodestudy.ui.theme
+package by.arsy.cleancodestudy.presentation.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

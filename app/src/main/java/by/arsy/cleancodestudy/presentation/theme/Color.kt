@@ -1,4 +1,4 @@
-package by.arsy.cleancodestudy.ui.theme
+package by.arsy.cleancodestudy.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
