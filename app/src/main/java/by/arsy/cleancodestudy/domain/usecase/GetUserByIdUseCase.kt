@@ -1,12 +1,12 @@
 package by.arsy.cleancodestudy.domain.usecase
 
 import by.arsy.cleancodestudy.domain.model.User
+import by.arsy.cleancodestudy.domain.repository.UserRepository
 
-class GetUserByIdUseCase {
+class GetUserByIdUseCase(private val userRepository: UserRepository) {
 
     fun execute(userId: Long): User {
-        // TODO: now return stub data
-        return User(userId, 100)
+        return userRepository.getUserById(userId)
     }
 
 }

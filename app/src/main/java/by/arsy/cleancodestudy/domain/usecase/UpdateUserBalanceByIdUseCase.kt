@@ -1,10 +1,14 @@
 package by.arsy.cleancodestudy.domain.usecase
 
-class UpdateUserBalanceByIdUseCase {
+import by.arsy.cleancodestudy.domain.repository.UserRepository
+
+class UpdateUserBalanceByIdUseCase(private val userRepository: UserRepository) {
 
     fun execute(userId: Long, difference: Int): Int {
-        // TODO: now return stub data
-        return difference
+        return userRepository.updateUserBalanceById(
+            userId = userId,
+            difference = difference
+        )
     }
 
 }
