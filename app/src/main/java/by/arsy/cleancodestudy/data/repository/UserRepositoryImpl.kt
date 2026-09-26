@@ -1,32 +1,34 @@
 package by.arsy.cleancodestudy.data.repository
 
-import android.content.Context
+import by.arsy.cleancodestudy.data.storage.UserStorage
+import by.arsy.cleancodestudy.data.storage.entity.UserEntity
 import by.arsy.cleancodestudy.domain.model.User
 import by.arsy.cleancodestudy.domain.repository.UserRepository
 
-class UserRepositoryImpl(context: Context) : UserRepository {
-
-    private val sharedPreferences = context.getSharedPreferences(
-        PREFERENCE_NAME,
-        Context.MODE_PRIVATE
-    )
+class UserRepositoryImpl(private val userStorage: UserStorage) : UserRepository {
 
     override fun getUserById(userId: Long): User {
-        val balance = sharedPreferences.getInt(userId.toString(), 0)
-        return User(
-            id = userId,
-            balance = balance
-        )
+        return map(userEntity = userStorage.getUser(userId))
     }
 
     override fun updateUserBalanceById(userId: Long, difference: Int): Int {
         val user = getUserById(userId)
         val newBalance = user.balance + difference
-        sharedPreferences.edit().putInt(user.id.toString(), newBalance).apply()
+        userStorage.updateUser(user = map(user.copy(balance = newBalance)))
         return newBalance
     }
 
-    companion object {
-        private const val PREFERENCE_NAME = "preference_name"
+    private fun map(user: User) : UserEntity {
+        return UserEntity(
+            id = user.id,
+            balance = user.balance
+        )
+    }
+
+    private fun map(userEntity: UserEntity) : User {
+        return User(
+            id = userEntity.id,
+            balance = userEntity.balance
+        )
     }
 }

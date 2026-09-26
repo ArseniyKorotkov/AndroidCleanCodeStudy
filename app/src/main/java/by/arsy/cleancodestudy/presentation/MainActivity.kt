@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import by.arsy.cleancodestudy.data.repository.UserRepositoryImpl
+import by.arsy.cleancodestudy.data.storage.SharedPreferencesUserStorage
 import by.arsy.cleancodestudy.domain.repository.UserRepository
 import by.arsy.cleancodestudy.domain.usecase.GetUserByIdUseCase
 import by.arsy.cleancodestudy.domain.usecase.UpdateUserBalanceByIdUseCase
@@ -18,7 +19,13 @@ const val STUB_USER_ID = 1L
 
 class MainActivity : ComponentActivity() {
 
-    private val userRepository: UserRepository by lazy { UserRepositoryImpl(context = applicationContext) }
+    private val sharedPreferencesUserStorage: SharedPreferencesUserStorage by lazy {
+        SharedPreferencesUserStorage(context = applicationContext)
+    }
+
+    private val userRepository: UserRepository by lazy {
+        UserRepositoryImpl(userStorage = sharedPreferencesUserStorage)
+    }
     private val updateUserBalanceByIdUseCase by lazy { UpdateUserBalanceByIdUseCase(userRepository) }
     private val getUserUseCase by lazy { GetUserByIdUseCase(userRepository) }
 
