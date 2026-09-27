@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "CleanCodeStudy"
 include(":app")
- 
+include(":data")
+include(":domain")
