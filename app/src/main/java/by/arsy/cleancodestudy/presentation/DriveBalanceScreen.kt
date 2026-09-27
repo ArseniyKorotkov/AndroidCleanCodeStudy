@@ -8,7 +8,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -19,21 +18,21 @@ const val DEFAULT_INPUT_VALUE = ""
 
 @Composable
 fun DriveBalanceScreen(
+    balance: Int,
     onUpdateUserBalance: (Int) -> Unit,
-    onGetUserBalance: () -> Int,
+    onGetUserBalance: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var inputNumber by rememberSaveable { mutableStateOf(DEFAULT_INPUT_VALUE) }
-    var outputNumber by rememberSaveable { mutableIntStateOf(0) }
     Column(modifier = modifier) {
 
         Text(
-            text = outputNumber.toString(),
+            text = balance.toString(),
             modifier = Modifier.fillMaxWidth()
         )
 
         Button(
-            onClick = { outputNumber = onGetUserBalance.invoke() },
+            onClick = { onGetUserBalance.invoke() },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("update balance".uppercase())

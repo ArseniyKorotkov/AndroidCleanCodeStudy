@@ -7,7 +7,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import by.arsy.cleancodestudy.data.repository.UserRepositoryImpl
 import by.arsy.cleancodestudy.data.storage.SharedPreferencesUserStorage
 import by.arsy.cleancodestudy.domain.repository.UserRepository
@@ -34,16 +36,25 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val vm: DriveBalanceViewModel = viewModel {
+                DriveBalanceViewModel(
+                    updateUserBalanceByIdUseCase = updateUserBalanceByIdUseCase,
+                    getUserUseCase = getUserUseCase
+                )
+            }
+            val balance = vm.balance.collectAsState().value
+
             CleanCodeStudyTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     DriveBalanceScreen(
+                        balance = balance,
                         onUpdateUserBalance = { difference ->
-                            updateUserBalanceByIdUseCase.execute(
+                            vm.updateUserBalance(
                                 userId = STUB_USER_ID,
                                 difference = difference
                             )
                         },
-                        onGetUserBalance = { getUserUseCase.execute(userId = STUB_USER_ID).balance },
+                        onGetUserBalance = { vm.getUserBalance(userId = STUB_USER_ID) },
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
