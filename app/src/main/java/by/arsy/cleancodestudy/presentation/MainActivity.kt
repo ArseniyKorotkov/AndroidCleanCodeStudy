@@ -9,20 +9,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import by.arsy.cleancodestudy.presentation.theme.CleanCodeStudyTheme
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val STUB_USER_ID = 1L
 
 class MainActivity : ComponentActivity() {
 
+    private val vm by viewModel<DriveBalanceViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val vm: DriveBalanceViewModel = viewModel(
-                factory = DriveBalanceViewModelFactory(context = applicationContext)
-            )
             val balance = vm.balance.collectAsState().value
 
             CleanCodeStudyTheme {
