@@ -9,19 +9,27 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
+import by.arsy.cleancodestudy.app.App
 import by.arsy.cleancodestudy.presentation.theme.CleanCodeStudyTheme
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import javax.inject.Inject
 
 const val STUB_USER_ID = 1L
 
 class MainActivity : ComponentActivity() {
 
-    private val vm by viewModel<DriveBalanceViewModel>()
+    @Inject
+    lateinit var vmFactory: DriveBalanceViewModelFactory
+    private lateinit var vm: DriveBalanceViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        (applicationContext as App).appComponent.inject(mainActivity = this)
         enableEdgeToEdge()
         setContent {
+            vm = viewModel(
+                factory = vmFactory
+            )
             val balance = vm.balance.collectAsState().value
 
             CleanCodeStudyTheme {

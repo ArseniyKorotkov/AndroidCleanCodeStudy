@@ -1,30 +1,21 @@
 package by.arsy.cleancodestudy.app
 
 import android.app.Application
-import by.arsy.cleancodestudy.di.appModule
-import by.arsy.cleancodestudy.di.dataModule
-import by.arsy.cleancodestudy.di.domainModule
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.startKoin
-import org.koin.core.logger.Level
+import by.arsy.cleancodestudy.di.AppComponent
+import by.arsy.cleancodestudy.di.AppModule
+import by.arsy.cleancodestudy.di.DaggerAppComponent
 
 class App : Application() {
+
+    lateinit var appComponent: AppComponent
 
     override fun onCreate() {
         super.onCreate()
 
-        startKoin {
-            androidLogger(level = Level.DEBUG)
-            androidContext(androidContext = this@App)
-            modules(
-                modules = listOf(
-                    appModule,
-                    dataModule,
-                    domainModule
-                )
-            )
-        }
+        appComponent = DaggerAppComponent
+            .builder()
+            .appModule(AppModule(context = this))
+            .build()
     }
 
 }

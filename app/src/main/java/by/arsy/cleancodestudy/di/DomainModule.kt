@@ -1,17 +1,22 @@
 package by.arsy.cleancodestudy.di
 
+import by.arsy.cleancodestudy.domain.repository.UserRepository
 import by.arsy.cleancodestudy.domain.usecase.GetUserByIdUseCase
 import by.arsy.cleancodestudy.domain.usecase.UpdateUserBalanceByIdUseCase
-import org.koin.dsl.module
+import dagger.Module
+import dagger.Provides
 
-val domainModule = module {
+@Module
+class DomainModule {
 
-    single<UpdateUserBalanceByIdUseCase> {
-        UpdateUserBalanceByIdUseCase(userRepository = get())
+    @Provides
+    fun provideUpdateUserBalanceByIdUseCase(userRepository: UserRepository): UpdateUserBalanceByIdUseCase {
+        return UpdateUserBalanceByIdUseCase(userRepository = userRepository)
     }
 
-    single<GetUserByIdUseCase> {
-        GetUserByIdUseCase(userRepository = get())
+    @Provides
+    fun provideGetUserByIdUseCase(userRepository: UserRepository): GetUserByIdUseCase {
+        return GetUserByIdUseCase(userRepository = userRepository)
     }
 
 }

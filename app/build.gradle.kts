@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.ksp)
 }
 
 android {
@@ -45,9 +46,11 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
 
-    implementation(platform(libs.koin.bom))
-    implementation(libs.koin.android)
-    implementation(libs.koin.compose.viewmodel)
+    implementation(libs.dagger.main)
+    ksp(libs.dagger.compiler)
+//    implementation(platform(libs.koin.bom))
+//    implementation(libs.koin.android)
+//    implementation(libs.koin.compose.viewmodel)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)

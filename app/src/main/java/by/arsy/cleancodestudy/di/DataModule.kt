@@ -1,19 +1,24 @@
 package by.arsy.cleancodestudy.di
 
+import android.content.Context
 import by.arsy.cleancodestudy.data.repository.UserRepositoryImpl
 import by.arsy.cleancodestudy.data.storage.SharedPreferencesUserStorage
 import by.arsy.cleancodestudy.data.storage.UserStorage
 import by.arsy.cleancodestudy.domain.repository.UserRepository
-import org.koin.dsl.module
+import dagger.Module
+import dagger.Provides
 
-val dataModule = module {
+@Module
+class DataModule {
 
-    factory<UserStorage> {
-        SharedPreferencesUserStorage(context = get())
+    @Provides
+    fun provideUserStorage(context: Context): UserStorage {
+        return SharedPreferencesUserStorage(context = context)
     }
 
-    factory<UserRepository> {
-        UserRepositoryImpl(userStorage = get())
+    @Provides
+    fun provideUserRepository(userStorage: UserStorage): UserRepository {
+        return UserRepositoryImpl(userStorage = userStorage)
     }
 
 }
