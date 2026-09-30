@@ -4,32 +4,25 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
-import by.arsy.cleancodestudy.app.App
 import by.arsy.cleancodestudy.presentation.theme.CleanCodeStudyTheme
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
 const val STUB_USER_ID = 1L
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    @Inject
-    lateinit var vmFactory: DriveBalanceViewModelFactory
-    private lateinit var vm: DriveBalanceViewModel
+    private val vm: DriveBalanceViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (applicationContext as App).appComponent.inject(mainActivity = this)
         enableEdgeToEdge()
         setContent {
-            vm = viewModel(
-                factory = vmFactory
-            )
             val balance = vm.balance.collectAsState().value
 
             CleanCodeStudyTheme {

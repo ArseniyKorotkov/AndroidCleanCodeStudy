@@ -3,10 +3,13 @@ package by.arsy.cleancodestudy.presentation
 import androidx.lifecycle.ViewModel
 import by.arsy.cleancodestudy.domain.usecase.GetUserByIdUseCase
 import by.arsy.cleancodestudy.domain.usecase.UpdateUserBalanceByIdUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
-class DriveBalanceViewModel(
+@HiltViewModel
+class DriveBalanceViewModel @Inject constructor(
     private val updateUserBalanceByIdUseCase: UpdateUserBalanceByIdUseCase,
     private val getUserUseCase: GetUserByIdUseCase
 ) : ViewModel() {
