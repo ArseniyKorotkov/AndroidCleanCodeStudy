@@ -13,8 +13,6 @@ import androidx.compose.ui.Modifier
 import by.arsy.cleancodestudy.presentation.theme.CleanCodeStudyTheme
 import dagger.hilt.android.AndroidEntryPoint
 
-const val STUB_USER_ID = 1L
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val vm: DriveBalanceViewModel by viewModels()
@@ -23,19 +21,27 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val balance = vm.balance.collectAsState().value
+            val state = vm.state.collectAsState().value
 
             CleanCodeStudyTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     DriveBalanceScreen(
-                        balance = balance,
+                        balance = state.balance,
                         onUpdateUserBalance = { difference ->
-                            vm.updateUserBalance(
-                                userId = STUB_USER_ID,
-                                difference = difference
+                            vm.send(
+                                event = DriveBalanceEvent.UpdateEvent(
+                                    userId = state.userId,
+                                    difference = difference
+                                )
                             )
                         },
-                        onGetUserBalance = { vm.getUserBalance(userId = STUB_USER_ID) },
+                        onGetUserBalance = {
+                            vm.send(
+                                event = DriveBalanceEvent.GetEvent(
+                                    userId = state.userId
+                                )
+                            )
+                        },
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
