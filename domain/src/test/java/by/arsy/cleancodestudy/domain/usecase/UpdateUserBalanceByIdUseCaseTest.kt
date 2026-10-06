@@ -4,7 +4,8 @@ import by.arsy.cleancodestudy.domain.model.User
 import by.arsy.cleancodestudy.domain.repository.UserRepository
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.times
@@ -23,47 +24,9 @@ class UpdateUserBalanceByIdUseCaseTest {
         Mockito.reset(/* ...mocks = */ userRepository)
     }
 
-    @Test
-    fun `should not update data if difference is zero`() {
-        val testBalanceDifference = 0
-        val testUserId = 1L
-        val testBalance = 10
-        val testUser = User(testUserId, testBalance)
-
-        val useCase = UpdateUserBalanceByIdUseCase(userRepository = userRepository)
-
-        whenever(
-            methodCall = userRepository.getUserById(userId = testUserId)
-        ).thenReturn(/* value = */ testUser)
-
-        val actualBalance = useCase.execute(
-            userId = testUserId,
-            difference = testBalanceDifference
-        )
-
-        Assertions.assertEquals(
-            /* expected = */ testBalance,
-            /* actual = */ actualBalance
-        )
-
-        verify(
-            /* mock = */ userRepository,
-            /* mode = */ times(1)
-        ).getUserById(userId = testUserId)
-
-        verify(
-            /* mock = */ userRepository,
-            /* mode = */ never()
-        ).updateUserBalanceById(
-            userId = any(),
-            difference = any()
-        )
-
-    }
-
-    @Test
-    fun `should update data if difference is not zero`() {
-        val testBalanceDifference = 10
+    @ParameterizedTest
+    @ValueSource(ints = [-48, 0, 12])
+    fun `should update data if difference is not zero`(testBalanceDifference: Int) {
         val testUserId = 1L
         val testBalance = 4
         val expectedBalance = testBalance + testBalanceDifference
@@ -92,14 +55,16 @@ class UpdateUserBalanceByIdUseCaseTest {
             /* actual = */ actualBalance
         )
 
+        val isDifferenceZero = testBalanceDifference == 0
+        val once = times( /* wantedNumberOfInvocations = */ 1)
         verify(
             /* mock = */ userRepository,
-            /* mode = */ never()
+            /* mode = */ if (isDifferenceZero) once else never()
         ).getUserById(userId = testUserId)
 
         verify(
             /* mock = */ userRepository,
-            /* mode = */ times( /* wantedNumberOfInvocations = */ 1)
+            /* mode = */ if (isDifferenceZero) never() else once
         ).updateUserBalanceById(
             userId = any(),
             difference = eq(value = testBalanceDifference)
